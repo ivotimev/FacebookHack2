@@ -1,1 +1,1 @@
-require( __dirname + '/http.js');
+var socketio = require(__dirname + '/socketio.js')
