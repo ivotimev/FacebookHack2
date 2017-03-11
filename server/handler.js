@@ -289,9 +289,8 @@ var handle_like_movie = function(username, client, msgobj, callback) {
             });
         },
         
-        // add binding user-movie
+        // check if the binding already exists
         function(movie_ids, callback) {
-
             if (movie_ids.length < 1) {
                 callback("this should be impossible! add binidng user-movie step");
                 return;
@@ -299,6 +298,28 @@ var handle_like_movie = function(username, client, msgobj, callback) {
                 console.log("More than 1 movies matching with the same title. ONLY getting the first one!");
             }
             var the_movie_id = movie_ids[0];
+            
+            db.user_movie.find({
+                "nickname": username,
+                "movieid": the_movie_id
+            }, function(err, docs) {
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                if (docs.length > 0) {
+                    callback("binding already exists for this user and movie " + username + " " + movie_title);
+                    return;
+                } else {
+                    callback(null, username, the_movie_id);
+                }
+            });
+
+        },
+        
+        // add binding user-movie
+        function(username, the_movie_id, callback) {
+
             var newdoc = {};
             newdoc["nickname"] = username;
             newdoc["movieid"] = the_movie_id;
