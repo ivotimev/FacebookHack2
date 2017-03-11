@@ -3,6 +3,7 @@ package ourcoolgroup.facebookhack;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,6 +23,10 @@ public class NavigationActivity extends AppCompatActivity
         setContentView(R.layout.activity_navigation);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        System.out.println("Main");
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().add(R.id.fragment_viewer, new FeedFragment()).commit();
 
         /*might be unnecessary*/
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -79,11 +84,13 @@ public class NavigationActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+        //get fragment to load
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
         int id = item.getItemId();
 
         if (id == R.id.nav_feed) {
-            // Handle the camera action
+            fragmentManager.beginTransaction().add(R.id.fragment_viewer, new FeedFragment()).commit();
         } else if (id == R.id.nav_movies) {
 
         } else if (id == R.id.nav_games) {
@@ -97,6 +104,7 @@ public class NavigationActivity extends AppCompatActivity
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        setTitle(item.getTitle());
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
