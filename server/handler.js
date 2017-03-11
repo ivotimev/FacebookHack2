@@ -92,14 +92,52 @@ var handle_login = function(client, msgobj, callback) {
         return;
     }
     
-    var token = session.make_token(username);
-    
-    var resp = {
-        "type": "login_success",
-        "token": token,
-        "user_type": "normal"
-    }
-    socketio.send(client, JSON.stringify(resp));
+    async.waterfall([
+        
+        // check if database has the user
+        function(callback) {
+            db.users.find({
+                "nickname": username
+            }, function(err, docs) {
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                var user_exists = docs.length == 1;
+                callback(null, user_exists);
+            });
+        },
+        
+        // insert user in database if necessary
+        function(user_exists, callback) {
+            if (user_exists) {
+                callback(null);
+                return;
+            } else {
+                add_new_user(username, callback); // callback is here
+                return;
+            }
+        },
+        
+        // send response to user
+        function(callback) {
+            var token = session.make_token(username);
+            
+            var resp = {
+                "type": "login_success",
+                "token": token,
+                "user_type": "normal"
+            }
+            socketio.send(client, JSON.stringify(resp));
+        }
+        
+    ], function(err, res) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+    });
+
 };
 
 // Authenticated handlers
@@ -179,7 +217,23 @@ var handle_my_movies = function(username, client, msgobj, callback) {
     });
 }
 
-// Helpers
+// Helpers: operations
+var add_new_user = function(username, callback) {
+    var newdoc = {};
+    newdoc["nickname"] = username;
+    db.users.insert(newdoc, function(err, ndoc) {
+        if (err) {
+            callback(err);
+            return;
+        } else {
+            console.log("Successfully inserted: " + JSON.stringify(ndoc));
+            callback(null);
+            return;
+        }
+    });
+}
+
+// Helpers: basics
 // =============================================================================
 var generic_handler_callback = function(err, res) {
     if (err) {
@@ -192,6 +246,7 @@ var generic_handler_callback = function(err, res) {
     }
 }
 
+// =============================================================================
 module.exports = {
     "handle": handle
 };
