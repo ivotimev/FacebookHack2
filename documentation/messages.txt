@@ -1,10 +1,49 @@
 SERVER TO CLIENT
-
-CLIENT TO SERVER
+================================================================================
 
     {
-        "type": "login",
-        "username": "me",
-        "password": "pass"
+        "type": "login_success",
+        "token": "098f7as98f90as86f",
+        "user_type": "normal"
     }
-    client sends message to login
+    
+    {
+        "type": "login_fail"
+    }
+    
+    {
+        "type": "my_movies",
+        "movies": [
+            {
+                "title"
+            }
+        ]
+    }
+    Response to my_movies
+    
+    {
+        "type": "invalid_token"
+    }
+    token invalid, user should be asked to login again
+
+CLIENT TO SERVER
+================================================================================
+
+    UNAUTHENTICATED
+    ----------------------------------------------------------------------------
+        
+        {
+            "type": "login",
+            "username": "me",
+            "password": "pass"
+        }
+        client sends message to login
+        
+    AUTHENTICATED
+    ----------------------------------------------------------------------------
+    
+        {
+            "type": "my_movies",
+            "token": "098f7as98f90as86f"
+        }
+        client requests the list of movies that he has already liked
