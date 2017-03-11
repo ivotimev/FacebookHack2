@@ -3,6 +3,7 @@ var utils_base = require(__dirname + "/utils_base.js");
 var socketio = require(__dirname + "/socketio.js");
 var session = require(__dirname + "/session.js");
 var db = require(__dirname + "/db.js");
+var async = require("async");
  
 var messages_unauthenticated = new Set([
     "login"
@@ -13,6 +14,10 @@ var messages_authenticated = new Set([
     "like_movie"
 ]);
 
+var messages_elevated = new Set([
+
+]);
+
 // First order handlers
 // =============================================================================
 var handle = function(client, msgobj) {
@@ -21,11 +26,11 @@ var handle = function(client, msgobj) {
         console.log("no valid type field");
         return;
     }
-    if (messages_unauthenticated.contains(msgobj)) {
+    if (messages_unauthenticated.contains(type)) {
         handle_unauthenticated_msg(client, msgobj);
-    } else if (messages_authenticated.contains(msgobj)) {
+    } else if (messages_authenticated.contains(type)) {
         handle_authenticated_msg(client, msgobj);
-    } else if (messages_elevated.contains(msgobj)) {
+    } else if (messages_elevated.contains(type)) {
         handle_elevated_msg(client, msgobj);
     } else {
         console.log("unrecognized message!");
