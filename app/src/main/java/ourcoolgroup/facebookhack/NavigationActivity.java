@@ -14,8 +14,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private FeedFragment feedFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,10 +27,10 @@ public class NavigationActivity extends AppCompatActivity
         setContentView(R.layout.activity_navigation);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        System.out.println("Main");
 
+        feedFragment = new FeedFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.fragment_viewer, new FeedFragment()).commit();
+        fragmentManager.beginTransaction().add(R.id.fragment_viewer, feedFragment).commit();
 
         /*might be unnecessary*/
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -46,6 +50,8 @@ public class NavigationActivity extends AppCompatActivity
         /*might be unnecessary*/
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setCheckedItem(R.id.nav_feed);
+        setTitle("Picks");
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -90,7 +96,28 @@ public class NavigationActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_feed) {
-            fragmentManager.beginTransaction().add(R.id.fragment_viewer, new FeedFragment()).commit();
+            fragmentManager.beginTransaction().replace(R.id.fragment_viewer, feedFragment).commit();
+            FeedCard transformersCard = new FeedCard();
+
+            ArrayList<Friend> friends = new ArrayList<Friend>();
+            friends.add(new Friend());
+            friends.add(new Friend());
+            transformersCard.setFriends(friends);
+            transformersCard.setTitle("Transformers");
+            transformersCard.setGenres(new String[]{"Action", "Sci-fi", "Romance"});
+
+            feedFragment.addCard(transformersCard);
+
+            FeedCard arrivalCard = new FeedCard();
+            ArrayList<Friend> friends2 = new ArrayList<Friend>();
+            friends2.add(new Friend());
+            friends2.add(new Friend());
+            friends2.add(new Friend());
+            arrivalCard.setFriends(friends2);
+            arrivalCard.setTitle("Arrival");
+            arrivalCard.setGenres(new String[]{"Sci-fi", "Thriller", "Drama"});
+
+            feedFragment.addCard(arrivalCard);
         } else if (id == R.id.nav_movies) {
 
         } else if (id == R.id.nav_games) {
