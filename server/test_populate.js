@@ -28,6 +28,10 @@ async.waterfall([
         var client = {};
         client.emit = function(emittype, data) {
             console.log("Client data: " + data);
+            var dobj = JSON.parse(data);
+            if (dobj.type == "like_movie_status") {
+                callback(null, token);
+            }
         }
         
         var like_msg = {
@@ -36,9 +40,21 @@ async.waterfall([
             "movie_title": "Facebook"
         };
         handler.handle(client, like_msg);
-    }
+    },
     
     // get list of liked movies
+    function(token, callback) {
+        var client = {};
+        client.emit = function(emittype, data) {
+            console.log("Client data: " + data);
+        }
+
+        var movies_msg = {
+            "type": "my_movies",
+            "token": token
+        };
+        handler.handle(client, movies_msg);
+    }
 
 ], function(err, res) {
     if (err) {
