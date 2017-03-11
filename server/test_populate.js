@@ -29,9 +29,7 @@ async.waterfall([
         client.emit = function(emittype, data) {
             console.log("Client data: " + data);
             var dobj = JSON.parse(data);
-            if (dobj.type == "like_movie_status") {
-                callback(null, token);
-            }
+            callback(null, dobj, token);
         }
         
         var like_msg = {
@@ -42,11 +40,33 @@ async.waterfall([
         handler.handle(client, like_msg);
     },
     
+    // if it's a choose, choose a movie
+    function(dobj, token, callback) {
+        var client = {};
+        client.emit = function(emittype, data) {
+            console.log("Client data: " + data);
+            callback(null, token);
+        }
+        
+        if (dobj.type == "like_movie_status" && dobj.status == "choose") {
+            var like_msg = {
+                "type": "like_movie",
+                "token": token,
+                "movie_title": "Status Update: A Facebook Fairytale",
+                "imdbid": "tt2222428"
+            };
+            handler.handle(client, like_msg);
+        } else {
+            callback("Unexpected state!");
+        }
+    },
+    
     // get list of liked movies
     function(token, callback) {
         var client = {};
         client.emit = function(emittype, data) {
             console.log("Client data: " + data);
+            callback(null);
         }
 
         var movies_msg = {
@@ -59,10 +79,10 @@ async.waterfall([
 ], function(err, res) {
     if (err) {
         console.log(err);
-        return;
+        process.exit(1);
     } 
     if (res) {
         console.log(res);
-        return;
     }
+    process.exit(0);
 });

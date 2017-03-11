@@ -28,7 +28,14 @@ SERVER TO CLIENT
     
     {
         "type": "like_movie_status",
-        "status": "success" // can also be "fail"
+        "status": "success" // can also be "fail", or "choose"
+        "choose": [
+            {
+                "imdbid": "098af098sa",
+                "poster": "http://blah.com/huh.jpg",
+                "title": "star wars parody"
+            }
+        ]
     }
     response to like_movie
 
@@ -57,6 +64,7 @@ CLIENT TO SERVER
         {
             "type": "like_movie",
             "token": "098f7as98f90as86f",
-            "movie_title": "Star Wars"
+            "movie_title": "Star Wars",
+            "imdbid": "098fs96e" // optional field
         }
         user adds a liked movie to his list

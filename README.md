@@ -1,4 +1,4 @@
-# FacebookHack2 - Common Dig
+# Picktur
 our facebook hack
 
 ## Idea
