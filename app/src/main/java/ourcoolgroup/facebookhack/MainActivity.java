@@ -30,36 +30,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void requestMovies() throws Exception {
-        JSONObject json = new JSONObject();
 
-        if(this.token != null) {
-            json.put("type", "my_movies");
-            json.put("token", this.token);
-        } else {
-            throw new Exception("Invalid request - not logged in");
-        }
-
-        sendJSON(MainActivity.IP_ADDRESS, MainActivity.PORT, json);
     }
 
     public void likeMovie(String movieTitle) throws Exception {
-        JSONObject json = new JSONObject();
 
-        if(this.token != null) {
-            json.put("type", "like_movie");
-            json.put("token", this.token);
-            json.put("movie_title", movieTitle);
-        } else {
-            throw new Exception("Invalid post - not logged in");
-        }
-
-        sendJSON(MainActivity.IP_ADDRESS, MainActivity.PORT, json);
     }
 
     private void sendJSON(String address, int port, JSONObject json) throws IOException {
-        Socket s = new Socket(address, port);
 
-        OutputStreamWriter out = new OutputStreamWriter(s.getOutputStream());
-        out.write(json.toString());
     }
 }
