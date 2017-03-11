@@ -4,8 +4,10 @@
   "description": "example",
   "main": "server.js",
   "dependencies": {
+    "Set": "^0.4.1",
     "async": "^2.1.5",
     "express": "^4.14.1",
+    "randomstring": "^1.1.5",
     "socket.io": "^1.7.3"
   },
   "devDependencies": {},
