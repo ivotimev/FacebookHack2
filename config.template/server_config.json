@@ -1,0 +1,8 @@
+{
+    "use_ssl": false,
+    "ssl_certificate": "/path/to/certificate.pem",
+    "ssl_privkey": "/path/to/privkey.pem",
+    "hostname": "localhost",
+    "http_port": 8080,
+    "https_port": 443
+}
