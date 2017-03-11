@@ -25,6 +25,12 @@ SERVER TO CLIENT
         "type": "invalid_token"
     }
     token invalid, user should be asked to login again
+    
+    {
+        "type": "like_movie_status",
+        "status": "success" // can also be "fail"
+    }
+    response to like_movie
 
 CLIENT TO SERVER
 ================================================================================
@@ -47,3 +53,10 @@ CLIENT TO SERVER
             "token": "098f7as98f90as86f"
         }
         client requests the list of movies that he has already liked
+        
+        {
+            "type": "like_movie",
+            "token": "098f7as98f90as86f",
+            "movie_title": "Star Wars"
+        }
+        user adds a liked movie to his list
