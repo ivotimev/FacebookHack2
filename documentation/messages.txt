@@ -20,6 +20,11 @@ SERVER TO CLIENT
         ]
     }
     Response to my_movies
+    
+    {
+        "type": "invalid_token"
+    }
+    token invalid, user should be asked to login again
 
 CLIENT TO SERVER
 ================================================================================
