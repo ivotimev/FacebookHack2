@@ -2,6 +2,7 @@ var Set = require('Set');
 var utils_base = require(__dirname + "/utils_base.js");
 var socketio = require(__dirname + "/socketio.js");
 var session = require(__dirname + "/session.js");
+var db = require(__dirname + "/db.js");
  
 var messages_unauthenticated = new Set([
     "login"
