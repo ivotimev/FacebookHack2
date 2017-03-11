@@ -1,5 +1,8 @@
 package ourcoolgroup.facebookhack;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 
 /**
@@ -7,7 +10,7 @@ import android.media.Image;
  */
 
 public class Friend {
-    private Image profilePic;
+    private Bitmap profilePic;
     private String name;
 
     public Friend(){
@@ -15,7 +18,12 @@ public class Friend {
         name = null;
     }
 
-    public Image getProfilePic() {
+    public Bitmap getProfilePic(Context context) {
+        if(profilePic == null)
+        {
+            profilePic = BitmapFactory.decodeResource(context.getResources(), R.drawable.profile_pic_placeholder);
+        }
         return profilePic;
     }
+
 }

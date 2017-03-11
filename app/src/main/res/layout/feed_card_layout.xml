@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/fab_margin"
+    android:clickable="true"
     android:background="@drawable/rect"
+    android:backgroundTintMode="add"
     android:elevation="2dp"
     android:orientation="horizontal"
     app:layout_collapseParallaxMultiplier="1.0">
@@ -22,13 +26,12 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/fab_margin"
-        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="@dimen/fab_margin"
-        android:layout_marginTop="@dimen/fab_margin"
-        android:orientation="horizontal">
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/title_text"
@@ -36,7 +39,43 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Placeholder Film"
-            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="123dp" />
+
+        <TextView
+            android:id="@+id/genres_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentRight="false"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentTop="false"
+            android:layout_toRightOf="@+id/textView2"
+            android:layout_weight="1"
+            android:text="genre, genre, genere, genre"
+            tools:layout_editor_absoluteX="332dp"
+            tools:layout_editor_absoluteY="475dp" />
+
+        <TextView
+            android:id="@+id/friends_interested"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-condensed"
+            android:text="5 friends could be interested"
+            android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle" />
+
+        <GridView
+            android:id="@+id/grid_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:columnWidth="35dp"
+            android:gravity="start"
+            android:numColumns="auto_fit"
+            android:stretchMode="columnWidth" />
+
     </LinearLayout>
 
 </LinearLayout>
