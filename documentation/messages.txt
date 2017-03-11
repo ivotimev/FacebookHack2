@@ -68,4 +68,4 @@ CLIENT TO SERVER
             "imdbid": "098fs96e" // optional field,
             "action": "like" // can be "like" "watched" "blacklist" "planned"
         }
-        user adds a liked movie to his list
+        user adds val1 liked movie to his list

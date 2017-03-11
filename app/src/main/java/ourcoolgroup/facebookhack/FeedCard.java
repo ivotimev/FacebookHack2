@@ -1,7 +1,9 @@
 package ourcoolgroup.facebookhack;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.media.Image;
+import android.media.MediaPlayer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

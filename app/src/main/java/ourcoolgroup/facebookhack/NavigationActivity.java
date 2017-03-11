@@ -56,6 +56,12 @@ public class NavigationActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        loadPicks();
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -76,7 +82,7 @@ public class NavigationActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // as you specify val1 parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -85,6 +91,41 @@ public class NavigationActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void loadPicks()
+    {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.fragment_viewer, feedFragment).commit();
+        FeedCardWithTag transformersCard = new FeedCardWithTag();
+
+        ArrayList<Friend> friends = new ArrayList<Friend>();
+        friends.add(new Friend());
+        friends.add(new Friend());
+        transformersCard.setFriends(friends);
+        transformersCard.setTitle("Transformers");
+        transformersCard.setGenres(new String[]{"Action", "Sci-fi", "Romance"});
+        transformersCard.setTag(FeedCardWithTag.LOTS_OF_FRIENDS_INTERESTED);
+
+        feedFragment.addCard(transformersCard);
+
+        FeedCardWithTag arrivalCard = new FeedCardWithTag();
+        ArrayList<Friend> friends2 = new ArrayList<Friend>();
+        friends2.add(new Friend());
+        friends2.add(new Friend());
+        friends2.add(new Friend());
+        arrivalCard.setFriends(friends2);
+        arrivalCard.setTitle("Arrival");
+        arrivalCard.setGenres(new String[]{"Sci-fi", "Thriller", "Drama"});
+        arrivalCard.setTag(FeedCardWithTag.YOU_MIGHT_ENJOY);
+
+        FeedCard fastAndFuriousCard = new FeedCard();
+        fastAndFuriousCard.setTitle("Fast and Furious");
+        fastAndFuriousCard.setFriends(friends2);
+        fastAndFuriousCard.setGenres(new String[]{"Sci-fi", "Thriller", "Drama"});
+
+        feedFragment.addCard(fastAndFuriousCard);
+        feedFragment.addCard(arrivalCard);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -96,28 +137,7 @@ public class NavigationActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_feed) {
-            fragmentManager.beginTransaction().replace(R.id.fragment_viewer, feedFragment).commit();
-            FeedCard transformersCard = new FeedCard();
-
-            ArrayList<Friend> friends = new ArrayList<Friend>();
-            friends.add(new Friend());
-            friends.add(new Friend());
-            transformersCard.setFriends(friends);
-            transformersCard.setTitle("Transformers");
-            transformersCard.setGenres(new String[]{"Action", "Sci-fi", "Romance"});
-
-            feedFragment.addCard(transformersCard);
-
-            FeedCard arrivalCard = new FeedCard();
-            ArrayList<Friend> friends2 = new ArrayList<Friend>();
-            friends2.add(new Friend());
-            friends2.add(new Friend());
-            friends2.add(new Friend());
-            arrivalCard.setFriends(friends2);
-            arrivalCard.setTitle("Arrival");
-            arrivalCard.setGenres(new String[]{"Sci-fi", "Thriller", "Drama"});
-
-            feedFragment.addCard(arrivalCard);
+            loadPicks();
         } else if (id == R.id.nav_movies) {
 
         } else if (id == R.id.nav_games) {
