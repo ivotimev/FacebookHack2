@@ -8,12 +8,9 @@ import android.view.View;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 
 public class MainActivity extends AppCompatActivity {
-    private static String IP_ADDRESS = "8.8.8.8";
+    private static String IP_ADDRESS = "localhost";
     private static int PORT = 7777;
     private String token;
 
@@ -21,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
     }
 
     /* Called when the application starts initially */
