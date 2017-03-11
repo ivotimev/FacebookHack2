@@ -1,0 +1,10 @@
+SERVER TO CLIENT
+
+CLIENT TO SERVER
+
+    {
+        "type": "login",
+        "username": "me",
+        "password": "pass"
+    }
+    client sends message to login
