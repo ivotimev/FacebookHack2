@@ -32,6 +32,7 @@ db.movies.persistence.setAutocompactionInterval(3600 * 1000);
 // {
 //     nickname
 //     imdbid
+//     action
 // }
 db.user_movie = new Datastore({
     filename:  __dirname + '/../db/user_movie.db',

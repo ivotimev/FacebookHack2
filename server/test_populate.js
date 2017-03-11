@@ -1,5 +1,6 @@
 var handler = require(__dirname + "/handler.js");
 var async = require("async");
+var utils_base = require(__dirname + "/utils_base.js");
 
 var test_liked_movie = "Star Wars";
 
@@ -35,7 +36,9 @@ async.waterfall([
         var like_msg = {
             "type": "like_movie",
             "token": token,
-            "movie_title": "Facebook"
+            "movie_title": "Facebook",
+            "action": "like"
+            
         };
         handler.handle(client, like_msg);
     },
@@ -53,7 +56,8 @@ async.waterfall([
                 "type": "like_movie",
                 "token": token,
                 "movie_title": "Status Update: A Facebook Fairytale",
-                "imdbid": "tt2222428"
+                "imdbid": "tt2222428",
+                "action": "like"
             };
             handler.handle(client, like_msg);
         } else {
@@ -79,10 +83,12 @@ async.waterfall([
 ], function(err, res) {
     if (err) {
         console.log(err);
-        process.exit(1);
+        utils_base.exit_nodejs(1);
+        return;
     } 
     if (res) {
         console.log(res);
     }
-    process.exit(0);
+    utils_base.exit_nodejs(1);
 });
+

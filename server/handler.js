@@ -239,6 +239,16 @@ var handle_like_movie = function(username, client, msgobj, callback) {
         callback("movie id not a string");
         return;
     }
+    
+    var action = msgobj["action"];
+    if (!action || !utils_base.is_string(action) || !like_action_valid(action)) {
+        var resp = {};
+        resp["type"] = "like_movie_status";
+        resp["status"] = "fail";
+        socketio.send(client, JSON.stringify(resp));
+        callback("movie action not valid");
+        return;
+    }
 
     async.waterfall([
     
@@ -346,23 +356,19 @@ var handle_like_movie = function(username, client, msgobj, callback) {
 
         },
         
-        // check if the binding already exists
+        // remove existing bindings for this movie and user
         function(imdbid, callback) {
-
-            db.user_movie.find({
+            
+            db.user_movie.remove({
                 "nickname": username,
                 "imdbid": imdbid
-            }, function(err, docs) {
+            }, {}, function(err, nremoved) {
                 if (err) {
                     callback(err);
                     return;
                 }
-                if (docs.length > 0) {
-                    callback("binding already exists for this user and movie " + username);
-                    return;
-                } else {
-                    callback(null, username, imdbid);
-                }
+                console.log("removed " + nremoved + " entries from user_movie");
+                callback(null, username, imdbid);
             });
 
         },
@@ -373,6 +379,7 @@ var handle_like_movie = function(username, client, msgobj, callback) {
             var newdoc = {};
             newdoc["nickname"] = username;
             newdoc["imdbid"] = imdbid;
+            newdoc["action"] = action;
             db.user_movie.insert(newdoc, function(err, ndoc) {
                 if (err) {
                     callback(err);
@@ -397,6 +404,7 @@ var handle_like_movie = function(username, client, msgobj, callback) {
     ], function(err) {
         if (err) {
             if (err == "void") {
+                console.log("void");
                 callback(null);
                 return;
             }
@@ -440,6 +448,16 @@ var generic_handler_callback = function(err, res) {
         return;
     }
 }
+
+var valid_like_actions = new Set([
+    "like",
+    "watched",
+    "blacklist",
+    "planned"
+]);
+var like_action_valid = function(action) {
+    return valid_like_actions.contains(action);
+};
 
 // =============================================================================
 module.exports = {

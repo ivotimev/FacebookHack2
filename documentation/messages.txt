@@ -65,6 +65,7 @@ CLIENT TO SERVER
             "type": "like_movie",
             "token": "098f7as98f90as86f",
             "movie_title": "Star Wars",
-            "imdbid": "098fs96e" // optional field
+            "imdbid": "098fs96e" // optional field,
+            "action": "like" // can be "like" "watched" "blacklist" "planned"
         }
         user adds a liked movie to his list
