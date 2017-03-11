@@ -18,7 +18,10 @@ db.users.persistence.setAutocompactionInterval(3600 * 1000);
 
 // MOVIES
 // {
+//     imdbid
 //     title
+//     posterimg
+//     year
 // }
 db.movies = new Datastore({
     filename:  __dirname + '/../db/movies.db',
@@ -28,7 +31,7 @@ db.movies.persistence.setAutocompactionInterval(3600 * 1000);
 // USER_MOVIE
 // {
 //     nickname
-//     movieid
+//     imdbid
 // }
 db.user_movie = new Datastore({
     filename:  __dirname + '/../db/user_movie.db',

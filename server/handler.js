@@ -4,6 +4,7 @@ var socketio = require(__dirname + "/socketio.js");
 var session = require(__dirname + "/session.js");
 var db = require(__dirname + "/db.js");
 var async = require("async");
+var omdb = require('omdb');
  
 var messages_unauthenticated = new Set([
     "login"
@@ -166,9 +167,10 @@ var handle_my_movies = function(username, client, msgobj, callback) {
         function(docs, callback) {
             var movie_titles = [];
             async.each(docs, function(doc, callback) {
-                var movieid = doc["movieid"];
+                var imdbid = doc["imdbid"];
+                console.log("user likes " + imdbid);
                 db.movies.find({
-                    "_id": movieid
+                    "imdbid": imdbid
                 }, function(err, docs) {
                     if (err) {
                         callback(err);
@@ -181,7 +183,8 @@ var handle_my_movies = function(username, client, msgobj, callback) {
                         callback(null);
                         return;
                     } else {
-                        callback("expected only 1 result, instead " + docs.length);
+                        console.log("no movie found for id " + imdbid);
+                        callback(null);
                         return;
                     }
                 });
@@ -226,103 +229,150 @@ var handle_like_movie = function(username, client, msgobj, callback) {
         callback("movie title not found or not a string");
         return;
     }
+    
+    var imdbid = msgobj["imdbid"];
+    if (imdbid && !utils_base.is_string(imdbid)) {
+        var resp = {};
+        resp["type"] = "like_movie_status";
+        resp["status"] = "fail";
+        socketio.send(client, JSON.stringify(resp));
+        callback("movie id not a string");
+        return;
+    }
 
     async.waterfall([
     
-        // check if database already has this movie
+        // get moves from imdb given title
         function(callback) {
+            if (imdbid) {
+                callback(null, imdbid);
+                return;
+            } else {
+                omdb.search(movie_title, function(err, movies) {
+                    if(err) {
+                        return console.error(err);
+                    }
+                    
+                    // no movies found, error
+                    if (movies.length < 1) {
+                        callback("no movies find with this title");
+                        return;
+                    }
+                    
+                    // only one movie found, proceeding
+                    if (movies.length == 1) {
+                        var movie = movies[0];
+                        var imdbid = movie.imdb;
+                        callback(null, imdbid);
+                        return;
+                    }
+                    
+                    // send user a list of choices to make
+                    if (movies.length > 1) {
+
+                        var resp = {};
+                        resp["type"] = "like_movie_status";
+                        resp["status"] = "choose";
+                        
+                        var choose = [];
+                        
+                        for (var i = 0; i < movies.length; i++) {
+                            var m = movies[i];
+                            var chooseobj = {};
+                            chooseobj["imdbid"] = m["imdb"];
+                            chooseobj["poster"] = m["poster"];
+                            chooseobj["title"] = m["title"];
+                            choose.push(chooseobj);
+                        }
+                        
+                        resp["choose"] = choose;
+                        
+                        socketio.send(client, JSON.stringify(resp));
+                        
+                        callback("void");
+                    }
+
+                });
+            }
+        },
+    
+        // check if database has this movie already
+        function(imdbid, callback) {
             db.movies.find({
-                "title": movie_title
+                "imdbid": imdbid
             }, function(err, docs) {
                 if (err) {
                     callback(err);
                     return;
                 }
                 var movie_exists = docs.length > 0;
-                callback(null, movie_exists);
+                callback(null, movie_exists, imdbid);
                 return;
             });
         },
         
-        // add the movie to database if necessary
-        function(movie_exists, callback) {
+        // add movie to database if necessary
+        function(movie_exists, imdbid, callback) {
             if (movie_exists) {
-                callback(null);
-                return
-            } else {
-                var newdoc = {};
-                newdoc["title"] = movie_title;
+                callback(null, imdbid);
+                return;
+            }
+            
+            omdb.get({ imdb: imdbid }, true, function(err, movie) {
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                var title = movie.title;
+                var posterimg = movie.poster;
+                var year = movie.year;
+                
+                var newdoc = {
+                    "imdbid": imdbid,
+                    "title": title,
+                    "posterimg": posterimg,
+                    "year": year
+                };
                 db.movies.insert(newdoc, function(err, ndoc) {
                     if (err) {
                         callback(err);
                         return;
                     }
-                    console.log("successfully inserted: " + JSON.stringify(ndoc));
-                    callback(null);
+                    console.log("inserted new doc: " + JSON.stringify(ndoc));
+                    callback(null, imdbid);
                     return;
                 });
-            }
-        },
-        
-        // get the movies from database corresponding to title
-        function(callback) {
-            db.movies.find({
-                "title": movie_title
-            }, function(err, docs) {
-                if (err) {
-                    callback(err);
-                    return;
-                } else {
-                    if (docs.length == 0) {
-                        callback("no movies found? this should be impossible because movies that are not there are added before this step");
-                        return;
-                    } else {
-                        var movie_ids = [];
-                        for (var i = 0; i < docs.length; i++) {
-                            var doc = docs[i];
-                            var the_id = doc["_id"];
-                            movie_ids.push(the_id);
-                        }
-                        callback(null, movie_ids);
-                    }
-                }
             });
+
         },
         
         // check if the binding already exists
-        function(movie_ids, callback) {
-            if (movie_ids.length < 1) {
-                callback("this should be impossible! add binidng user-movie step");
-                return;
-            } if (movie_ids.length > 1) {
-                console.log("More than 1 movies matching with the same title. ONLY getting the first one!");
-            }
-            var the_movie_id = movie_ids[0];
-            
+        function(imdbid, callback) {
+
             db.user_movie.find({
                 "nickname": username,
-                "movieid": the_movie_id
+                "imdbid": imdbid
             }, function(err, docs) {
                 if (err) {
                     callback(err);
                     return;
                 }
                 if (docs.length > 0) {
-                    callback("binding already exists for this user and movie " + username + " " + movie_title);
+                    callback("binding already exists for this user and movie " + username);
                     return;
                 } else {
-                    callback(null, username, the_movie_id);
+                    callback(null, username, imdbid);
                 }
             });
 
         },
         
         // add binding user-movie
-        function(username, the_movie_id, callback) {
+        function(username, imdbid, callback) {
 
             var newdoc = {};
             newdoc["nickname"] = username;
-            newdoc["movieid"] = the_movie_id;
+            newdoc["imdbid"] = imdbid;
             db.user_movie.insert(newdoc, function(err, ndoc) {
                 if (err) {
                     callback(err);
@@ -346,6 +396,10 @@ var handle_like_movie = function(username, client, msgobj, callback) {
     
     ], function(err) {
         if (err) {
+            if (err == "void") {
+                callback(null);
+                return;
+            }
             var resp = {};
             resp["type"] = "like_movie_status";
             resp["status"] = "fail";
