@@ -7,4 +7,5 @@ Find among friends common interests in movies, music and games, and automaticall
 
 ## What it is
 
-An android app
+An android app which enables users to easily state the media that they are interested in by using
+a swipe left/right to state interest model.
