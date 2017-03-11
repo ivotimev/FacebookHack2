@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import subprocess
+
+# UniSecrets/
+exec_dir = os.path.abspath(os.path.dirname(os.path.abspath(__file__)))
+os.chdir(exec_dir)
+
+# start server
+server_dir = os.path.abspath(exec_dir + os.sep + 'server')
+os.chdir(server_dir)
+subprocess.call(['node', 'server.js'])
