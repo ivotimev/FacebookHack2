@@ -10,6 +10,7 @@ import android.media.tv.TvContract;
 import android.os.AsyncTask;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,7 +107,7 @@ public class FeedCard implements Serializable {
         return genresStr;
     }
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+    private static class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
 
         public DownloadImageTask(ImageView bmImage) {
@@ -127,6 +128,17 @@ public class FeedCard implements Serializable {
 
         protected void onPostExecute(Bitmap result) {
             bmImage.setImageBitmap(result);
+        }
+    }
+
+    public static void downloadImage(ImageView imageView, String URL)
+    {
+        try {
+            new DownloadImageTask(imageView)
+                    .execute(URL);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 

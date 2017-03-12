@@ -56,7 +56,9 @@ public class FriendThumbnailAdapter extends BaseAdapter {
             imageView = (ImageView) view;
         }
 
-        imageView.setImageBitmap((i < (feedCard.getFriendsWantToWatch() != null ? feedCard.getFriendsWantToWatch().size() : 0) ? feedCard.getFriendsWantToWatch().get(i) : feedCard.getFriendsInterested().get(i - (feedCard.getFriendsWantToWatch() != null ? feedCard.getFriendsWantToWatch().size() : 0))).getProfilePic(mContext));
+        Friend friend = ((i < (feedCard.getFriendsWantToWatch() != null ? feedCard.getFriendsWantToWatch().size() : 0) ? feedCard.getFriendsWantToWatch().get(i) : feedCard.getFriendsInterested().get(i - (feedCard.getFriendsWantToWatch() != null ? feedCard.getFriendsWantToWatch().size() : 0))));
+        FeedCard.downloadImage(imageView, friend.getProfilePicURL());
+
         return imageView;
     }
 }

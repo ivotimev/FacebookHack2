@@ -17,7 +17,7 @@ public class Friend implements Serializable{
     private String name;
 
     public Friend(){
-        profilePicURL = null;
+        profilePicURL = "http://eadb.org/wp-content/uploads/2015/08/profile-placeholder.jpg";
         name = null;
     }
 

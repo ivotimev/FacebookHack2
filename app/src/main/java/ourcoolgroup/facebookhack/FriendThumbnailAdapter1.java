@@ -22,7 +22,7 @@ public class FriendThumbnailAdapter1 extends BaseAdapter {
     public FriendThumbnailAdapter1(Context mContext, ArrayList<Friend> friends, int squareSize){
         this.mContext = mContext;
         this.friends = friends;
-        this.squareSize = squareSize;
+        this.squareSize = squareSize - 10;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class FriendThumbnailAdapter1 extends BaseAdapter {
             imageView = (ImageView) view;
         }
 
-        imageView.setImageBitmap(friends.get(i).getProfilePic(mContext));
+        FeedCard.downloadImage(imageView, friends.get(i).getProfilePicURL());
         return imageView;
     }
 }
