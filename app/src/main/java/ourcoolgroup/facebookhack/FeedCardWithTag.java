@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import java.io.Serializable;
+
 /**
  * Created by Dell on 11/03/2017.
  */
@@ -16,6 +18,7 @@ public class FeedCardWithTag extends FeedCard {
     public static final Triple<String, Integer, Integer> FRIEND_WANTS_TO_SEE = new Triple<>(" might want to see ...", Color.BLUE, Color.DKGRAY);
     public static final Triple<String, Integer, Integer> YOU_MIGHT_ENJOY = new Triple<>(" You might enjoy ...", Color.RED, Color.DKGRAY);
     public static final Triple<String, Integer, Integer> LOTS_OF_FRIENDS_INTERESTED = new Triple<>("A bunch of people are interested in ...", Color.CYAN, Color.DKGRAY);
+    public static final Triple<String, Integer, Integer> RECENTLY_VIEWED = new Triple<>("Do you want to go see ... ?", Color.GREEN, Color.DKGRAY);
 
     private Triple<String, Integer, Integer> tag;
 
@@ -38,7 +41,8 @@ public class FeedCardWithTag extends FeedCard {
         return feedCard;
     }
 
-    static class Triple<E, F, T>{
+    static class Triple<E, F, T> implements Serializable{
+        private static final long serialVersionUID = 1L;
         E val1;
         F val2;
         T val3;

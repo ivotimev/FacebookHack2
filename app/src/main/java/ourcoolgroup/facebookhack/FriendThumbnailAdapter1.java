@@ -1,12 +1,9 @@
 package ourcoolgroup.facebookhack;
 
 import android.content.Context;
-import android.support.v4.util.ArraySet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsoluteLayout;
 import android.widget.BaseAdapter;
-import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 
@@ -16,21 +13,21 @@ import java.util.ArrayList;
  * Created by Dell on 11/03/2017.
  */
 
-public class FriendThumbnailAdapter extends BaseAdapter {
+public class FriendThumbnailAdapter1 extends BaseAdapter {
 
     private Context mContext;
-    private FeedCard feedCard;
+    private ArrayList<Friend> friends;
     private int squareSize;
 
-    public FriendThumbnailAdapter(Context mContext, FeedCard feedCard, int squareSize){
+    public FriendThumbnailAdapter1(Context mContext, ArrayList<Friend> friends, int squareSize){
         this.mContext = mContext;
-        this.feedCard = feedCard;
+        this.friends = friends;
         this.squareSize = squareSize;
     }
 
     @Override
     public int getCount() {
-        return (feedCard.getFriendsInterested() != null ? feedCard.getFriendsInterested().size() : 0) + (feedCard.getFriendsWantToWatch() != null ? feedCard.getFriendsWantToWatch().size() : 0);
+        return friends != null ? friends.size() : 0;
     }
 
     @Override
@@ -56,7 +53,7 @@ public class FriendThumbnailAdapter extends BaseAdapter {
             imageView = (ImageView) view;
         }
 
-        imageView.setImageBitmap((i < (feedCard.getFriendsWantToWatch() != null ? feedCard.getFriendsWantToWatch().size() : 0) ? feedCard.getFriendsWantToWatch().get(i) : feedCard.getFriendsInterested().get(i - (feedCard.getFriendsWantToWatch() != null ? feedCard.getFriendsWantToWatch().size() : 0))).getProfilePic(mContext));
+        imageView.setImageBitmap(friends.get(i).getProfilePic(mContext));
         return imageView;
     }
 }

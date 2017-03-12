@@ -15,17 +15,26 @@ import java.util.ArrayList;
  */
 
 public class FeedFragment extends Fragment {
+    private ArrayList<FeedCard> feedCards;
+    public FeedFragment(){
+        feedCards = new ArrayList<>();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View feedDisplay = inflater.inflate(R.layout.feed_fragment_layout, container, false);
+        LinearLayout cardDisplay = (LinearLayout) feedDisplay.findViewById(R.id.feed_card_display);
+        for(FeedCard feedCard : feedCards)
+        {
+            View cardView = feedCard.getSmallCardView(getActivity(), cardDisplay);
+            cardDisplay.addView(cardView);
+        }
         return feedDisplay;
     }
 
     public void addCard(FeedCard card)
     {
-        LinearLayout cardDisplay = (LinearLayout) getView().findViewById(R.id.feed_card_display);
-        View cardView = card.getSmallCardView(getActivity(), cardDisplay);
-        cardDisplay.addView(cardView);
+        feedCards.add(card);
     }
 }

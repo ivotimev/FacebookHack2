@@ -1,5 +1,7 @@
 package ourcoolgroup.facebookhack;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,6 +21,8 @@ import java.util.ArrayList;
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String VIEWED_MOVIE_CARD = "viewed_movie_card";
+
     private FeedFragment feedFragment;
 
     @Override
@@ -31,14 +35,24 @@ public class NavigationActivity extends AppCompatActivity
         feedFragment = new FeedFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().add(R.id.fragment_viewer, feedFragment).commit();
+        loadPicks(LoadSuggestionsHelper.getRecommendations());
 
         /*might be unnecessary*/
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                FeedCardWithTag transformersCard = new FeedCardWithTag();
+
+                ArrayList<Friend> friends = new ArrayList<Friend>();
+                friends.add(new Friend());
+                friends.add(new Friend());
+                transformersCard.setFriendsWantToWatch(friends);
+                transformersCard.setTitle("Transformers");
+                transformersCard.setGenres(new String[]{"Action", "Sci-fi", "Romance"});
+                transformersCard.setTag(FeedCardWithTag.LOTS_OF_FRIENDS_INTERESTED);
+
+                openMovieViewActivity(transformersCard);
             }
         });
 
@@ -55,10 +69,23 @@ public class NavigationActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    public void openMovieViewActivity(FeedCard feedCard)
+    {
+        Intent movieViewIntent = new Intent(NavigationActivity.this, MovieViewActivity.class);
+        movieViewIntent.putExtra(VIEWED_MOVIE_CARD, feedCard);
+        NavigationActivity.this.startActivity(movieViewIntent);
+    }
+
+    public static void openMovieViewActivity(FeedCard feedCard, Context context)
+    {
+        Intent movieViewIntent = new Intent(context, MovieViewActivity.class);
+        movieViewIntent.putExtra(VIEWED_MOVIE_CARD, feedCard);
+        context.startActivity(movieViewIntent);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
-        loadPicks();
     }
 
     @Override
@@ -93,39 +120,16 @@ public class NavigationActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    private void loadPicks()
+    private void loadPicks(ArrayList<FeedCard> picks)
     {
+        FeedFragment newfeedFragment = new FeedFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragment_viewer, feedFragment).commit();
-        FeedCardWithTag transformersCard = new FeedCardWithTag();
+        fragmentManager.beginTransaction().replace(R.id.fragment_viewer, newfeedFragment).commit();
 
-        ArrayList<Friend> friends = new ArrayList<Friend>();
-        friends.add(new Friend());
-        friends.add(new Friend());
-        transformersCard.setFriends(friends);
-        transformersCard.setTitle("Transformers");
-        transformersCard.setGenres(new String[]{"Action", "Sci-fi", "Romance"});
-        transformersCard.setTag(FeedCardWithTag.LOTS_OF_FRIENDS_INTERESTED);
-
-        feedFragment.addCard(transformersCard);
-
-        FeedCardWithTag arrivalCard = new FeedCardWithTag();
-        ArrayList<Friend> friends2 = new ArrayList<Friend>();
-        friends2.add(new Friend());
-        friends2.add(new Friend());
-        friends2.add(new Friend());
-        arrivalCard.setFriends(friends2);
-        arrivalCard.setTitle("Arrival");
-        arrivalCard.setGenres(new String[]{"Sci-fi", "Thriller", "Drama"});
-        arrivalCard.setTag(FeedCardWithTag.YOU_MIGHT_ENJOY);
-
-        FeedCard fastAndFuriousCard = new FeedCard();
-        fastAndFuriousCard.setTitle("Fast and Furious");
-        fastAndFuriousCard.setFriends(friends2);
-        fastAndFuriousCard.setGenres(new String[]{"Sci-fi", "Thriller", "Drama"});
-
-        feedFragment.addCard(fastAndFuriousCard);
-        feedFragment.addCard(arrivalCard);
+        for(FeedCard feedCard : picks)
+        {
+            newfeedFragment.addCard(feedCard);
+        }
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -137,7 +141,7 @@ public class NavigationActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_feed) {
-            loadPicks();
+            loadPicks(LoadSuggestionsHelper.getRecommendations());
         } else if (id == R.id.nav_movies) {
 
         } else if (id == R.id.nav_games) {
