@@ -35,9 +35,9 @@ public class MovieViewActivity extends AppCompatActivity {
         TextView movieTitleView = (TextView) findViewById(R.id.movie_title_view);
         movieTitleView.setText(feedCard.getTitle());
         GridView friendsView0 = (GridView) findViewById(R.id.gridView13);
-        friendsView0.setAdapter(new FriendThumbnailAdapter1(this, feedCard.getFriendsWantToWatch(), 200));
+        friendsView0.setAdapter(new FriendThumbnailAdapter1(this, feedCard.getFriendsWantToWatch(), 180));
         GridView friendsView1 = (GridView) findViewById(R.id.gridView12);
-        friendsView1.setAdapter(new FriendThumbnailAdapter1(this, feedCard.getFriendsInterested(), 200));
+        friendsView1.setAdapter(new FriendThumbnailAdapter1(this, feedCard.getFriendsInterested(), 180));
         TextView movieViewGenrer = (TextView) findViewById(R.id.movie_view_genres);
         movieViewGenrer.setText(feedCard.getGenreString());
         RatingBar imdbRatingBar = (RatingBar) findViewById(R.id.ratingBar);
