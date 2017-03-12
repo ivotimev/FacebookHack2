@@ -13,20 +13,25 @@ import java.io.Serializable;
 
 public class Friend implements Serializable{
     private static final long serialVersionUID = 1L;
-    private transient Bitmap profilePic;//could be url or smt
+    private String profilePicURL;//could be url or smt
     private String name;
 
     public Friend(){
-        profilePic = null;
+        profilePicURL = null;
         name = null;
     }
 
-    public Bitmap getProfilePic(Context context) {
-        if(profilePic == null)
-        {
-            profilePic = BitmapFactory.decodeResource(context.getResources(), R.drawable.profile_pic_placeholder);
-        }
-        return profilePic;
+    public Friend(String URL)
+    {
+        this.profilePicURL = URL;
+        name = null;
     }
 
+    public void setProfilePicURL(String profilePicURL) {
+        this.profilePicURL = profilePicURL;
+    }
+
+    public String getProfilePicURL() {
+        return profilePicURL;
+    }
 }

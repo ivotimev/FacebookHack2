@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -29,6 +30,8 @@ public class MovieViewActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        ImageView moviePosterView = (ImageView) findViewById(R.id.movie_view_poster);
+        feedCard.downloadImage(moviePosterView);
         TextView movieTitleView = (TextView) findViewById(R.id.movie_title_view);
         movieTitleView.setText(feedCard.getTitle());
         GridView friendsView0 = (GridView) findViewById(R.id.gridView13);

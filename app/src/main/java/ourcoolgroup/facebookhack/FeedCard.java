@@ -130,6 +130,17 @@ public class FeedCard implements Serializable {
         }
     }
 
+    public void downloadImage(ImageView imageView)
+    {
+        try {
+            new DownloadImageTask(imageView)
+                    .execute(coverImageURL);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     public View getSmallCardView(final Context context, ViewGroup container)
     {
         View feedCard = LayoutInflater.from(context).inflate(R.layout.feed_card_layout, container, false);
@@ -140,10 +151,8 @@ public class FeedCard implements Serializable {
                 NavigationActivity.openMovieViewActivity(FeedCard.this, view.getContext());
             }
         });
-        URL url = null;
         try {
-            new DownloadImageTask((ImageView) feedCard.findViewById(R.id.poster_view))
-                    .execute("https://upload.wikimedia.org/wikipedia/en/a/af/Insurgent_poster.jpg");
+            downloadImage((ImageView) feedCard.findViewById(R.id.poster_view));
         } catch (Exception e)
         {
             e.printStackTrace();
