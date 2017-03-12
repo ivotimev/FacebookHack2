@@ -34,6 +34,38 @@ public class LoadSuggestionsHelper {
 
         feedCards.add(insurgentCard);
 
+        FeedCardWithTag theHostCard = new FeedCardWithTag();
+        theHostCard.setTitle("The Host 2013");
+        theHostCard.setTag(FeedCardWithTag.FRIEND_WANTS_TO_SEE);
+        theHostCard.setFriendsWantToWatch(friendsWhoWantToSee);
+        theHostCard.setGenres(new String[]{"Action", "Thriller", "Distopian"});
+        theHostCard.setCoverImage("http://www.impawards.com/2013/posters/host_ver2.jpg");
+        theHostCard.setImdbRating(5.9/2);
+
+        feedCards.add(theHostCard);
+
+        FeedCardWithTag abductionCard = new FeedCardWithTag();
+        abductionCard.setTitle("Abduction 2011");
+        abductionCard.setTag(FeedCardWithTag.LOTS_OF_FRIENDS_INTERESTED);
+        abductionCard.setFriendsWantToWatch(friendsWhoWantToSee);
+        abductionCard.setFriendsInterested(friendsInterested);
+        abductionCard.setGenres(new String[]{"Action", "Thriller", "Distopian", "Drama"});
+        abductionCard.setCoverImage("http://www.hollywoodreporter.com/sites/default/files/2011/06/abduction_poster_embedding.jpg");
+        abductionCard.setImdbRating(2.5);
+
+        feedCards.add(abductionCard);
+
+        FeedCardWithTag theHungerGamesCard = new FeedCardWithTag();
+        theHungerGamesCard.setTitle("The Hunger Games 2012");
+        theHungerGamesCard.setTag(FeedCardWithTag.RECENTLY_VIEWED);
+        friendsInterested.add(new Friend());
+        theHungerGamesCard.setFriendsInterested(friendsInterested);
+        theHungerGamesCard.setGenres(new String[]{"Sci-fi", "Action", "Thriller", "Distopian", "Drama"});
+        theHungerGamesCard.setCoverImage("https://images-na.ssl-images-amazon.com/images/M/MV5BMjA4NDg3NzYxMF5BMl5BanBnXkFtZTcwNTgyNzkyNw@@._V1_SX300.jpg");
+        theHungerGamesCard.setImdbRating(3.6);
+
+        feedCards.add(theHungerGamesCard);
+
         return feedCards;
     }
 }

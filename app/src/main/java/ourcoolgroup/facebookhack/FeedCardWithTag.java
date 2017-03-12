@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 
 public class FeedCardWithTag extends FeedCard {
-    public static final Triple<String, Integer, Integer> FRIEND_WANTS_TO_SEE = new Triple<>(" might want to see ...", Color.parseColor("#eae9e5"), Color.parseColor("#324c89"));
+    public static final Triple<String, Integer, Integer> FRIEND_WANTS_TO_SEE = new Triple<>("A friend might want to see ...", Color.parseColor("#eae9e5"), Color.parseColor("#324c89"));
     public static final Triple<String, Integer, Integer> YOU_MIGHT_ENJOY = new Triple<>(" You might enjoy ...", Color.parseColor("#eae9e5"), Color.parseColor("#247a17"));
     public static final Triple<String, Integer, Integer> LOTS_OF_FRIENDS_INTERESTED = new Triple<>("A bunch of people are interested in ...", Color.parseColor("#eae9e5"), Color.parseColor("#117268"));
     public static final Triple<String, Integer, Integer> RECENTLY_VIEWED = new Triple<>("Do you want to go see ... ?", Color.parseColor("#eae9e5"), Color.parseColor("#a8841a"));
