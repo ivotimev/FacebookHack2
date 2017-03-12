@@ -42,17 +42,8 @@ public class NavigationActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FeedCardWithTag transformersCard = new FeedCardWithTag();
-
-                ArrayList<Friend> friends = new ArrayList<Friend>();
-                friends.add(new Friend());
-                friends.add(new Friend());
-                transformersCard.setFriendsWantToWatch(friends);
-                transformersCard.setTitle("Transformers");
-                transformersCard.setGenres(new String[]{"Action", "Sci-fi", "Romance"});
-                transformersCard.setTag(FeedCardWithTag.LOTS_OF_FRIENDS_INTERESTED);
-
-                openMovieViewActivity(transformersCard);
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.fragment_viewer, new SearchFragment()).commit();
             }
         });
 
